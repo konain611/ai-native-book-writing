@@ -50,7 +50,7 @@ specs/001-book-structure-spec/
 The project will follow the standard Docusaurus v3 folder structure.
 
 ```text
-/
+physical-ai-and-humanoid-robotics/
 ├── docusaurus.config.js # Main configuration file
 ├── sidebars.js          # Sidebar configuration
 ├── package.json
