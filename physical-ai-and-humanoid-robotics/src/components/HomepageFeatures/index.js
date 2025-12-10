@@ -1,64 +1,71 @@
+import React from 'react';
 import clsx from 'clsx';
-import Heading from '@theme/Heading';
 import styles from './styles.module.css';
+
+function HeroSection() {
+  return (
+    <header className={styles.hero}>
+      <div className={styles.heroInner}>
+        <h1 className={styles.title}>Physical AI & Humanoid Robotics</h1>
+        <p className={styles.subtitle}>
+          Building intelligent machines — from embodied cognition to actuation,
+          perception, and autonomous motion in real-world environments.
+        </p>
+        <button
+          className={styles.ctaButton}
+          onClick={() => (window.location.href = '/docs/intro')}
+        >
+          Explore the Book
+        </button>
+      </div>
+    </header>
+  );
+}
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
-    ),
+    title: 'Core Theory & Principles',
+    description:
+      'Embodied intelligence, sensorimotor learning, adaptive control, and frameworks for physical autonomy.',
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
-    description: (
-      <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
-      </>
-    ),
+    title: 'Humanoid Design & Mechanics',
+    description:
+      'Actuators, compliant structures, balance control, perception pipelines, and motion planning.',
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
+    title: 'Development & Deployment Workflow',
+    description:
+      'Simulation, embedded programming, middleware systems, and AI stacks for robotic development.',
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature(props) {
   return (
-    <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
-      <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
-        <p>{description}</p>
-      </div>
+    <div className={styles.featureCard}>
+      <h3 className={styles.featureTitle}>{props.title}</h3>
+      <p className={styles.featureDesc}>{props.description}</p>
     </div>
   );
 }
 
-export default function HomepageFeatures() {
+function FeaturesSection() {
   return (
     <section className={styles.features}>
-      <div className="container">
-        <div className="row">
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
-          ))}
-        </div>
+      <div className={styles.featuresGrid}>
+        {FeatureList.map((feature, idx) => (
+          <Feature key={idx} title={feature.title} description={feature.description} />
+        ))}
       </div>
     </section>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <>
+      <HeroSection />
+      <FeaturesSection />
+    </>
   );
 }

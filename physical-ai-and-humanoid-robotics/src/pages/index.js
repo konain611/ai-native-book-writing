@@ -1,34 +1,20 @@
-import clsx from 'clsx';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
-
-import Heading from '@theme/Heading';
-import styles from './index.module.css';
-
-function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
-  return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        <Heading as="h1" className="hero__title">
-          {siteConfig.title}
-        </Heading>
-        
-      </div>
-    </header>
-  );
-}
+import LearnSection from '../components/HomeSections/LearnSection';
+import WhySection from '../components/HomeSections/WhySection';
+import StartSection from '../components/HomeSections/StartSection';
 
 export default function Home() {
-  const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
-      <HomepageHeader />
-      <main>
+      title="Physical AI & Humanoid Robotics"
+      description="A comprehensive guide to embodied intelligence, humanoid engineering, and intelligent machines."
+    >
+      <main>  
         <HomepageFeatures />
+        <WhySection />
+        <LearnSection />
+        <StartSection />
       </main>
     </Layout>
   );

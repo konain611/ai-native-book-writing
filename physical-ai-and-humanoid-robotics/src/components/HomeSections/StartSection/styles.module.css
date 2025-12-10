@@ -1,0 +1,32 @@
+.section {
+  padding: 4rem 1rem;
+  background: #0d1b2a;
+  text-align: center;
+}
+
+.heading {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  color: #ffffff;
+}
+
+.text {
+  font-size: 1.1rem;
+  color: #e7eaee;
+  margin-bottom: 2rem;
+}
+
+.button {
+  padding: 0.9rem 2rem;
+  font-size: 1.1rem;
+  background: white;
+  color: #0d1b2a;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.button:hover {
+  opacity: 0.85;
+}
