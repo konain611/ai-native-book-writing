@@ -85,21 +85,6 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
-      algolia: {
-        appId: 'YOUR_APP_ID',
-        apiKey: 'YOUR_SEARCH_API_KEY',
-        indexName: 'YOUR_INDEX_NAME',
-        // Optional: see https://docusaurus.io/docs/search#highlight-words-in-search-results
-        contextualSearch: true,
-        // Optional: Specify domains where the navigation should occur
-        // For example: ['example.com', 'www.example.com']
-        externalUrlRegex: 'physical-ai-handbook\\.example\\.com',
-        // Optional: Algolia search parameters
-        searchParameters: {},
-        // Optional: path for search page that might receive more extensive design at a later stage.
-        searchPagePath: 'search',
-        //... other Algolia parameters
-      },
       colorMode: {
         respectPrefersColorScheme: true,
       },
@@ -111,10 +96,11 @@ const config = {
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
+            // type: 'docSidebar',
+            // sidebarId: 'tutorialSidebar',
+            to: '/docs/part-1/foundations-of-physical-ai',
             label: 'Book',
+            position: 'left',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {

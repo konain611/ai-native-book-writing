@@ -11,7 +11,7 @@ export default function StartSection() {
 
       <button
         className={styles.button}
-        onClick={() => (window.location.href = '/docs/intro')}
+        onClick={() => (window.location.href = '/docs/part-1/foundations-of-physical-ai')}
       >
         Start Reading
       </button>

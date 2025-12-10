@@ -13,7 +13,7 @@ function HeroSection() {
         </p>
         <button
           className={styles.ctaButton}
-          onClick={() => (window.location.href = '/docs/intro')}
+          onClick={() => (window.location.href = '/docs/part-1/foundations-of-physical-ai')}
         >
           Explore the Book
         </button>

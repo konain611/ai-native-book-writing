@@ -1,0 +1,85 @@
+---
+title: Navigation and SLAM
+slug: /part-5/navigation-and-slam
+description: How mobile robots build maps of their environment and navigate through them.
+---
+
+## Lesson 11.1: Introduction to SLAM (Simultaneous Localization and Mapping)
+
+For a mobile robot to operate autonomously in an unknown environment, it must solve a fundamental "chicken-and-egg" problem: to build a map, it needs to know where it is, but to know where it is, it needs a map. **Simultaneous Localization and Mapping (SLAM)** is the process of solving both of these problems at the same time: building a map of an unknown environment while simultaneously keeping track of the robot's location within that map.
+
+### The Core Components of SLAM
+
+A SLAM system is a continuous loop that involves three main parts:
+1.  **Perception (Sensing):** The robot uses its sensors to gather information about its surroundings. Common sensors for SLAM include:
+    *   **LiDAR (Light Detection and Ranging):** Provides precise distance measurements in a 2D or 3D point cloud. This is the sensor of choice for many SLAM systems due to its accuracy.
+    *   **Cameras (Visual SLAM or V-SLAM):** Use one or more cameras to see the world. V-SLAM is computationally more intensive but can use the rich visual information to recognize places it has been before ("loop closure").
+    *   **IMUs (Inertial Measurement Units):** Measure the robot's acceleration and rotation. IMU data is often fused with LiDAR or camera data to provide a better estimate of the robot's motion.
+2.  **Mapping:** The system uses the sensor data to build and update a representation of the environment. The map can take several forms:
+    *   **Occupancy Grid Map:** The world is divided into a grid, and each cell stores the probability that it is occupied by an obstacle. This is a common map type for 2D navigation.
+    *   **Feature-Based Map:** The map consists of the 3D locations of distinct landmarks or features (e.g., corners, visual keypoints). The robot localizes itself by observing these features.
+    *   **Point Cloud Map:** A dense collection of 3D points, often generated directly from a LiDAR sensor.
+3.  **Localization:** The system estimates the robot's current position and orientation (its "pose") within the map it has built so far. It does this by matching the current sensor readings to the existing map. The robot also uses its own motion estimates (from wheel encoders or an IMU) to predict where it should be.
+
+### The Importance of Loop Closure
+
+The biggest challenge in SLAM is **drift**. Small errors in the robot's motion estimate accumulate over time, causing the map to become distorted. For example, if a robot walks down a long hallway, turns right, and walks down another identical hallway, drift might cause it to think it is in a new, undiscovered area.
+
+**Loop closure** is the crucial process of recognizing a place that has been seen before. When the robot returns to a previously visited area, the SLAM system detects a match between the current sensor readings and the data from the earlier visit. This "loop closure" event allows the system to correct the accumulated drift, snapping the map back into a consistent state. It is the key to building large, accurate maps.
+
+---
+
+## Lesson 11.2: Popular SLAM Algorithms: EKF, Particle Filter, and Graph-Based
+
+Over the years, many different mathematical approaches have been developed to solve the SLAM problem. They can be broadly categorized into filter-based and graph-based methods.
+
+### EKF SLAM (Extended Kalman Filter)
+
+One of the earliest approaches to SLAM used the Extended Kalman Filter (EKF).
+*   **How it Works:** The EKF maintains an estimate of the robot's pose and the positions of all landmarks in the map, along with the uncertainty of these estimates. When the robot moves, the uncertainty grows. When it observes a landmark, the uncertainty shrinks.
+*   **Limitations:** The computational cost of EKF SLAM grows quadratically with the number of landmarks in the map. This makes it unsuitable for large-scale environments. It is also sensitive to incorrect data associations (i.e., mistaking one landmark for another). For these reasons, EKF SLAM is now mostly of historical interest.
+
+### Particle Filter SLAM (GMapping)
+
+Particle filters offer a more robust way to represent uncertainty. A well-known algorithm called **GMapping** is a particle-filter-based approach that has been very influential, especially in 2D LiDAR SLAM.
+*   **How it Works:** Instead of a single estimate of the robot's path, the system maintains a large number of possible paths, called "particles." Each particle represents a hypothesis of the robot's true trajectory.
+*   Particles that are more consistent with the robot's sensor measurements are given a higher "weight." Over time, particles that represent incorrect paths are eliminated, and the set of particles converges on the true path.
+*   **Advantages:** Particle filters are better at handling non-linear motion and can represent more complex probability distributions than an EKF. GMapping is a standard algorithm provided in ROS (Robot Operating System).
+
+### Graph-Based SLAM (ORB-SLAM, Cartographer)
+
+The current state-of-the-art in SLAM is dominated by **graph-based** methods.
+*   **How it Works:** This approach models the SLAM problem as a graph.
+    *   **Nodes:** Each "node" in the graph represents a robot pose at a particular point in time.
+    *   **Edges:** "Edges" or "constraints" connect the nodes. An edge can represent the robot's motion between two poses (an "odometry" constraint) or the observation of a landmark from a certain pose (a "landmark" constraint).
+*   When a **loop closure** occurs, a new edge is added to the graph, connecting the current robot pose to a much earlier pose.
+*   An optimization algorithm then runs over the entire graph, adjusting the positions of all the nodes simultaneously to find the configuration that best satisfies all the constraints. This process, called **pose graph optimization**, is very effective at correcting large amounts of accumulated drift.
+
+**Examples:**
+*   **ORB-SLAM:** A very popular open-source visual SLAM system that uses feature-based mapping and graph optimization.
+*   **Google Cartographer:** A powerful open-source system that works with both 2D/3D LiDAR and provides high-quality mapping using graph-based SLAM.
+
+---
+
+## Lesson 11.3: Navigation: Path Planning and Obstacle Avoidance
+
+Once a robot has a map, it can use it to navigate from one point to another. This process, often called the **navigation stack**, involves three main layers: global planning, local planning, and obstacle avoidance.
+
+### Global Path Planning
+
+The global planner is responsible for finding an optimal path from the robot's current location to a long-range goal on the map. It does not consider the robot's immediate surroundings, only the static map it has been given.
+*   **Common Algorithms:**
+    *   **A\* (A-Star):** A popular graph search algorithm. It discretizes the map into a grid and finds the shortest path from the start to the goal, taking into account the distance to obstacles. A* is guaranteed to find the shortest path if one exists.
+    *   **Dijkstra's Algorithm:** Similar to A*, but it explores equally in all directions, whereas A* uses a "heuristic" to prioritize searching in the direction of the goal.
+*   **Output:** The output of the global planner is a sequence of waypoints that forms a "road" for the robot to follow.
+
+### Local Path Planning and Obstacle Avoidance
+
+The global plan is just a rough guide. The local planner is responsible for generating the actual motor commands needed to follow the global plan while avoiding obstacles that may not have been on the original map (e.g., people, furniture that has been moved).
+*   **How it Works:** The local planner focuses on a small window of the robot's immediate surroundings, using real-time sensor data. It tries to generate a trajectory that follows the global path as closely as possible while also satisfying constraints like:
+    *   Not hitting any obstacles.
+    *   Obeying the robot's velocity and acceleration limits.
+*   **Dynamic Window Approach (DWA):** A popular local planning algorithm. At each time step, DWA simulates a set of possible trajectories (by sampling different velocities) over a short time horizon. It then scores each trajectory based on factors like proximity to the goal, distance to obstacles, and velocity. It picks the best-scoring trajectory and sends the corresponding velocity commands to the motors.
+*   This cycle repeats many times per second, allowing the robot to move smoothly towards its goal while reactively avoiding obstacles in its path.
+
+The combination of a robust SLAM system to build the map and a layered navigation stack to move through it is what gives a mobile robot true autonomy in complex environments.
