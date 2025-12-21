@@ -1,0 +1,5 @@
+This is a test book. It has some content that can be used for testing the RAG chatbot. The chatbot should be able to answer questions about this content.
+
+The first chapter is about the history of the chatbot. Chatbots have been around for a long time. The first chatbot was ELIZA, created in the 1960s.
+
+The second chapter is about the technology behind chatbots. Modern chatbots use natural language processing (NLP) and machine learning (ML) to understand and respond to user queries.

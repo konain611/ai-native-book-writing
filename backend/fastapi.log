@@ -1,0 +1,6 @@
+2025-12-21 21:24:23,460 - INFO - Received query: What is the history of chatbots?
+2025-12-21 21:24:23,809 - INFO - HTTP Request: POST https://api.cohere.com/v1/embed "HTTP/1.1 200 OK"
+2025-12-21 21:24:23,837 - ERROR - Error processing query: 'QdrantClient' object has no attribute 'search'
+2025-12-21 21:33:18,150 - INFO - Received query: What is the history of chatbots?
+2025-12-21 21:33:18,746 - INFO - HTTP Request: POST https://api.cohere.com/v1/embed "HTTP/1.1 200 OK"
+2025-12-21 21:33:18,770 - ERROR - Error processing query: 'QdrantClient' object has no attribute 'search'
